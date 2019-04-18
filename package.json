@@ -8,7 +8,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "concurrently \"cd client && npm install && PORT=3000 npm start\" \"cd server && npm install && PORT=3001 node ./bin/www\"",
+    "start": "concurrently \"cd client && npm install && npm start\" \"cd server && npm install && node ./bin/www\"",
     
     "test": "echo \"Error: no test specified\" && exit 1"
   },
