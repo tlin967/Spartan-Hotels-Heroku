@@ -8,8 +8,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "concurrently \"cd client && npm install && npm start\" \"cd server && npm install && node ./bin/www\"",
-    "heroku-postbuild": "cd client && npm install && npm run build",
+    "start": "concurrently \"cd client && npm install && PORT=3000 npm start\" \"cd server && npm install && PORT=3001 node ./bin/www\"",
+    
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
