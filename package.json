@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "CMPE 165 Project",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  },
   "devDependencies": {},
   "scripts": {
-    "start": "cd server && npm install && node ./bin/www && cd ..",
+    "start": "concurrently \"cd client && npm install && npm start\" \"cd server && npm install && node ./bin/www &&\"",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
