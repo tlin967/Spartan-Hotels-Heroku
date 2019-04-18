@@ -72,13 +72,13 @@ module.exports = {
 
 
     user: {
-        profile: 'select name, email, reward from spartanhotel.user where user_id=?',
+        profile: 'select name, email, reward from rs3a661h7sck1biq.user where user_id=?',
         checkEmailExists: 'select * from user where email=?',
-        checkUserNameExists: 'select user_id from spartanhotel.user where name=?',
-        create: 'insert into spartanhotel.user (user_id,name,password,email) values (null,?,?,?)',
+        checkUserNameExists: 'select user_id from rs3a661h7sck1biq.user where name=?',
+        create: 'insert into rs3a661h7sck1biq.user (user_id,name,password,email) values (null,?,?,?)',
         session: 'select LAST_INSERT_ID() as user_id ',
-        authenticate: 'select user_id, password from spartanhotel.user where email=?',
-        getAvailableRewards: 'SELECT sum(R.change) as sum FROM spartanhotel.reward R where user_id=? and date_active <= curdate();'
+        authenticate: 'select user_id, password from rs3a661h7sck1biq.user where email=?',
+        getAvailableRewards: 'SELECT sum(R.change) as sum FROM rs3a661h7sck1biq.reward R where user_id=? and date_active <= curdate();'
     },
 
     hotel: {
@@ -105,7 +105,7 @@ module.exports = {
 
             with 
             rb as (SELECT  B.*, R.hotel_id, R.room_number, R.price, R.bed_type, R.bed_number 
-            from spartanhotel.booking B join spartanhotel.room R 
+            from rs3a661h7sck1biq.booking B join rs3a661h7sck1biq.room R 
             on B.room_id = R.room_id where date_in < '2019-03-21' and date_out > '2019-03-08')
             
             select * from room 
@@ -121,7 +121,7 @@ module.exports = {
 
             SELECT * FROM 
             ( select  B.*, R.hotel_id, R.room_number, R.price, R.bed_type, R.bed_number 
-            from spartanhotel.booking B join spartanhotel.room R 
+            from rs3a661h7sck1biq.booking B join rs3a661h7sck1biq.room R 
             on B.room_id = R.room_id where date_in < '2019-03-05' and date_out > '2019-03-02' and status != 'cancelled' ) as BR
             ;
             */
@@ -132,7 +132,7 @@ module.exports = {
             var dateConditions = []
             let tempTableComponent = `with 
             rb as (SELECT  B.*, R.hotel_id, R.room_number, R.price, R.bed_type
-            from spartanhotel.booking B join spartanhotel.room R 
+            from rs3a661h7sck1biq.booking B join rs3a661h7sck1biq.room R 
             on B.room_id = R.room_id `
 
              // Date Conditions
@@ -325,7 +325,7 @@ module.exports = {
           var withConditions = []
           let tempTableComponent = `with 
           rb as (SELECT  B.*, R.hotel_id, R.room_number, R.price, R.bed_type
-          from spartanhotel.booking B join spartanhotel.room R 
+          from rs3a661h7sck1biq.booking B join rs3a661h7sck1biq.room R 
           on B.room_id = R.room_id `
       
            // Date Conditions
@@ -475,16 +475,16 @@ module.exports = {
        * 
        * @returns placeholder query to insert into transaction table
        */
-      makeTransaction: 'INSERT INTO spartanhotel.transaction(transaction_id, user_id, guest_id, total_price, cancellation_charge, date_in, date_out, status, amount_paid, stripe_id) values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      makeTransaction: 'INSERT INTO rs3a661h7sck1biq.transaction(transaction_id, user_id, guest_id, total_price, cancellation_charge, date_in, date_out, status, amount_paid, stripe_id) values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
       
       /**
        * Insert into transaction_room table
        * @param {*} transaction_id 
        * @param {[{}]} rooms_booked [{room:19, price:200},{room:20, price:400}]
-       * @returns A formatted query ie "INSERT INTO spartanhotel.transaction_room(transaction_id, room_id, room_price) VALUES (39,10,20),(39,11,65)"
+       * @returns A formatted query ie "INSERT INTO rs3a661h7sck1biq.transaction_room(transaction_id, room_id, room_price) VALUES (39,10,20),(39,11,65)"
        */
       makeTransactionDetails: function(transaction_id, rooms_booked){
-        let insertStatement = "INSERT INTO spartanhotel.transaction_room(transaction_id, room_id, room_price) VALUES "
+        let insertStatement = "INSERT INTO rs3a661h7sck1biq.transaction_room(transaction_id, room_id, room_price) VALUES "
         let placeholders = []
         let values = []
         for(i=0;i<rooms_booked.length;i++){
@@ -498,11 +498,11 @@ module.exports = {
       },
     
     //For when the user cancels the entire transaction
-    cancel_transaction: 'UPDATE spartanhotel.transaction SET status="cancelled" WHERE transaction_id=?',
-    cancel_all: 'DELETE from spartanhotel.transaction_room where transaction_id=?',
+    cancel_transaction: 'UPDATE rs3a661h7sck1biq.transaction SET status="cancelled" WHERE transaction_id=?',
+    cancel_all: 'DELETE from rs3a661h7sck1biq.transaction_room where transaction_id=?',
     // For when the user cancels only a single room
-    cancel_one: 'DELETE from spartanhotel.transaction_room where transaction_id=? AND room_id=?',
-    cancel_one_room: 'UPDATE spartanhotel.transaction SET total_price=?, cancellation_charge=?, amount_paid=? WHERE transaction_id=?',
+    cancel_one: 'DELETE from rs3a661h7sck1biq.transaction_room where transaction_id=? AND room_id=?',
+    cancel_one_room: 'UPDATE rs3a661h7sck1biq.transaction SET total_price=?, cancellation_charge=?, amount_paid=? WHERE transaction_id=?',
 
     modify: 'UPDATE booking SET status="modified", room_id=?, date_in=?, date_out=? WHERE booking_id=?',
     user_id: 'SELECT * FROM transaction WHERE transaction_id=?',
@@ -510,7 +510,7 @@ module.exports = {
 
     //When query is ran -> returns an array that cannot be cancelled, else returns an empty array which means can be cancelled
     isCancellable: function({transaction_id}) {
-      let query = `SELECT * FROM spartanhotel.transaction WHERE
+      let query = `SELECT * FROM rs3a661h7sck1biq.transaction WHERE
                     transaction_id = ? AND date_in <= CURDATE() AND date_out >= CURDATE() AND status != 'cancelled';`
 
       return mysql.format(query, [transaction_id])
@@ -519,7 +519,7 @@ module.exports = {
     //When ran -> returns an array that cannot be MODIFIED, else returns an empty array 
     //meaning the booking can be modified
     isModifiable: function({booking_id}) {
-      let query = `SELECT * FROM spartanhotel.transaction WHERE
+      let query = `SELECT * FROM rs3a661h7sck1biq.transaction WHERE
                     booking_id = ? 
                     AND date_in <= CURDATE() 
                     AND date_out >= CURDATE() 
@@ -532,7 +532,7 @@ module.exports = {
     // When ran -> returns an array with the selected result(s), else array is empty and isBookable is
     // ran for modifyAvailabilityCheck in reservation.js
     isOldBookingIdAndRoomId: function({transaction_id, room_id}) {
-      let query = `SELECT * FROM spartanhotel.transaction WHERE
+      let query = `SELECT * FROM rs3a661h7sck1biq.transaction WHERE
                     booking_id = ? 
                     AND room_id = ?  
                     AND status = 'booked';`
@@ -556,9 +556,9 @@ module.exports = {
           R.price,
           R.bed_type
         FROM
-            spartanhotel.booking B
+            rs3a661h7sck1biq.booking B
                 JOIN
-            spartanhotel.room R ON B.room_id = R.room_id
+            rs3a661h7sck1biq.room R ON B.room_id = R.room_id
         WHERE
             date_in < ?
                 AND date_out > ?
@@ -596,7 +596,7 @@ module.exports = {
       SELECT 
         distinct(B.room_id)
       FROM
-          spartanhotel.booking B
+          rs3a661h7sck1biq.booking B
       WHERE
           date_in < ?
               AND date_out > ?
@@ -670,7 +670,7 @@ module.exports = {
       //     (SELECT DISTINCT
       //         (room_id) AS B_room_id
       //     FROM
-      //         spartanhotel.booking B
+      //         rs3a661h7sck1biq.booking B
       //     WHERE
       //         date_in < '2019-03-21'
       //             AND date_out > '2019-03-02'
@@ -714,7 +714,7 @@ module.exports = {
           (SELECT DISTINCT
               (room_id) AS B_room_id
           FROM
-              spartanhotel.booking B
+              rs3a661h7sck1biq.booking B
           WHERE
               date_in < ?
                   AND date_out > ?
@@ -775,8 +775,8 @@ module.exports = {
               NOT EXISTS( SELECT 
                           *
                       FROM
-                          spartanhotel.booking B
-                      JOIN spartanhotel.room R ON B.room_id = R.room_id
+                          rs3a661h7sck1biq.booking B
+                      JOIN rs3a661h7sck1biq.room R ON B.room_id = R.room_id
                       WHERE
                           date_in < ?
                               AND date_out > ?
@@ -784,7 +784,7 @@ module.exports = {
                               AND R.room_id = ?) AS available
           ) AS availability
               JOIN
-          spartanhotel.room
+          rs3a661h7sck1biq.room
       WHERE
           room_id = ?
       ;
@@ -812,17 +812,17 @@ module.exports = {
 
     rewards: {
 
-      book: 'INSERT INTO spartanhotel.rewards(reward_book_id, user_id, room_id, reward_points, no_cancellation, date_in, date_out, status) values (null, ?, ?, ?, ?, ?, ?, ?)',
-      book: 'INSERT INTO spartanhotel.rewards (reward_book_id, user_id, room_id, reward_points, no_cancellation, date_in, date_out, status) values (null, ?, ?, ?, ?, ?, ?, ?)',
-      useOnBooking: 'INSERT INTO spartanhotel.reward (reward_id, user_id, reward_reason_id, transaction_id, date_active, `change`) values (null, ?, 1, ?, curdate(), ?)',
-      gainFromBooking: 'INSERT INTO spartanhotel.reward (reward_id, user_id, reward_reason_id, transaction_id, date_active, `change`) values (null, ?, 2, ?, ?, ?)',
-      getUserRecords: 'SELECT R.*,RR.reason FROM spartanhotel.reward R join spartanhotel.reward_reason RR on R.reward_reason_id = RR.reward_reason_id WHERE user_id=?',
-      cancelBooking: 'DELETE from spartanhotel.reward where transaction_id=?',
-      getOldBookingAppliedRewards: 'SELECT R.change FROM spartanhotel.reward R WHERE transaction_id = ? AND SIGN(change) = -1'
+      book: 'INSERT INTO rs3a661h7sck1biq.rewards(reward_book_id, user_id, room_id, reward_points, no_cancellation, date_in, date_out, status) values (null, ?, ?, ?, ?, ?, ?, ?)',
+      book: 'INSERT INTO rs3a661h7sck1biq.rewards (reward_book_id, user_id, room_id, reward_points, no_cancellation, date_in, date_out, status) values (null, ?, ?, ?, ?, ?, ?, ?)',
+      useOnBooking: 'INSERT INTO rs3a661h7sck1biq.reward (reward_id, user_id, reward_reason_id, transaction_id, date_active, `change`) values (null, ?, 1, ?, curdate(), ?)',
+      gainFromBooking: 'INSERT INTO rs3a661h7sck1biq.reward (reward_id, user_id, reward_reason_id, transaction_id, date_active, `change`) values (null, ?, 2, ?, ?, ?)',
+      getUserRecords: 'SELECT R.*,RR.reason FROM rs3a661h7sck1biq.reward R join rs3a661h7sck1biq.reward_reason RR on R.reward_reason_id = RR.reward_reason_id WHERE user_id=?',
+      cancelBooking: 'DELETE from rs3a661h7sck1biq.reward where transaction_id=?',
+      getOldBookingAppliedRewards: 'SELECT R.change FROM rs3a661h7sck1biq.reward R WHERE transaction_id = ? AND SIGN(change) = -1'
     },
 
     guest: {
-      insert: 'INSERT INTO spartanhotel.guest(guest_id, email, name) values (null, ?, ?)'
+      insert: 'INSERT INTO rs3a661h7sck1biq.guest(guest_id, email, name) values (null, ?, ?)'
 
     }
 
