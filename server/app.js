@@ -16,6 +16,10 @@ var app = express();
 
 const sessionStore = new MySQLStore(config)
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("../client/build"));
+}
+
 app.use(session({
   secret: 'keybfsdoardafsa cat',
   store: sessionStore,
