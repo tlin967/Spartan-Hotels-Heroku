@@ -6,7 +6,9 @@
   "dependencies": {},
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd server && npm install && node ./bin/www",
+    "heroku-postbuild": "cd ../client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
