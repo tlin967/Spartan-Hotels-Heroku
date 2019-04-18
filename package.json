@@ -8,7 +8,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "concurrently \"cd client && npm install && npm start\" \"cd server && npm install && node ./bin/www &&\"",
+    "start": "concurrently \"cd client && npm install && npm start\" \"cd server && npm install && node ./bin/www\"",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
