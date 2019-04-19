@@ -9,9 +9,9 @@ let config = {
 
 //For heroku
 let config = {
-    host:'ctgplw90pifdso61.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-    user:'qqunus9bd6bvdgrx',
-    password:'tg0v7tz16ilqigay',
-    database:'rs3a661h7sck1biq'
+    host:'pfw0ltdr46khxib3.cbetxkdyhwsb.us-east-1.rds.amazonaws.com	',
+    user:'iiwv47vkofr0d5c9',
+    password:'qarepmx8y26jp7ic',
+    database:'qzsp4l888kg17t5l'
 }
 module.exports = config

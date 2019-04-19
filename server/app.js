@@ -16,18 +16,6 @@ var app = express();
 
 const sessionStore = new MySQLStore(config)
 
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://spartan-hotels.herokuapp.com"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
 app.use(express.static("../client/build"));
 /*
 if (process.env.NODE_ENV === "production") {
