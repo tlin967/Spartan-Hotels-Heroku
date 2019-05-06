@@ -49,7 +49,6 @@ class Home extends React.Component {
 	}
 
 	componentDidMount() {
-
 	}
 
 	handleChange = (event) => {
@@ -150,7 +149,6 @@ class Home extends React.Component {
 
 	}
 
-
 	showPlaceDetails(place) {
 		let geoDetail = JSON.stringify(place.geometry.location, null, 2).replace(/['"]+/g, '')
 		const latitude = geoDetail.substring(geoDetail.lastIndexOf("lat:") + "lat: ".length, geoDetail.lastIndexOf(","))
@@ -171,8 +169,8 @@ class Home extends React.Component {
 				fullAddress, streetAddress,
 				city, state, place
 			},
-			)
 
+		)
 	}
 
 	search = (event) => {

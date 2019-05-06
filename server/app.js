@@ -30,6 +30,7 @@ app.use((req, res, next) => {
   next();
 });
 
+
 app.use(session({
   secret: 'keybfsdoardafsa cat',
   store: sessionStore,
@@ -53,9 +54,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // CORS HANDLING
-//app.use(cors({ credentials: true , origin: "http://localhost:3000"}))
 app.use(cors({ credentials: true , origin: "https://spartan-hotels.herokuapp.com"}))
-
 //https://stackoverflow.com/a/34574660
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
@@ -66,10 +65,8 @@ app.use(function(req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter)
-//app.use(path.resolve(__dirname + '../client/build/index.html'))
-
 app.get('*', (req, res) => {
-res.sendFile(path.resolve('../client/build/index.html'))
+  res.sendFile(path.resolve('../client/build/index.html'))
 })
 
 // catch 404 and forward to error handler
