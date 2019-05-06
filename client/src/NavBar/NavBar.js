@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom'
 import Registration from '../Registration/Registration'
 import { logoutClearSession, loginPost } from '../Utility/ReigstrationLoginFunction'
-
+import imageLogo from './Images/logo.png'
 // import neccessary components
 import {
   Form, FormGroup, Input
@@ -49,17 +49,23 @@ class NavBar extends React.Component {
         if (response === "S") {
           // console.log("login success")
           empty_fields["email"] = ''
+          temp_loginerror = ''
+          if (window.location.pathname === '/recoverage' || window.location.pathname === '/Accesscode')
+            this.props.history.push('/')
         } else {
-          temp_loginerror = "*Please enter valid credentials (email or password)"
+          temp_loginerror = "*Please enter valid credentials (email or password) or reset password"
           this.setState({ loginerror: temp_loginerror })
           empty_fields["email"] = this.state.loginfields.email
         }
 
-        this.setState({ loginfields: empty_fields, loginerror : temp_loginerror })
-        this.props.history.push(`/`)
+        this.setState({ loginfields: empty_fields, loginerror: temp_loginerror }, () => this.pushtoCurrentURL())
       })
     }
+  }
 
+  pushtoCurrentURL() {
+    const currentURL = this.props.location.pathname + this.props.location.search
+    this.props.history.push(currentURL)
   }
 
   Home(event) {
@@ -72,7 +78,15 @@ class NavBar extends React.Component {
     logoutClearSession()
     event.preventDefault()
     localStorage.removeItem('accesstoken')
-    this.props.history.push(`/`)
+    if (window.location.pathname === '/UserProfile' || window.location.pathname === '/Reservations')
+      this.props.history.push('/')
+    else
+      this.pushtoCurrentURL()
+  }
+
+  ResetPassword(event){
+    event.preventDefault()
+    this.props.history.push('/recoverage')
   }
 
   UserProfile(event) {
@@ -113,6 +127,7 @@ class NavBar extends React.Component {
 
     const ProfileLink = (<div className="col-auto" onClick={this.UserProfile.bind(this)} >My Profile</div>)
     const ReservationLink = (<div className="col-auto" onClick={this.Reservations.bind(this)} >My Reservations</div>)
+    const ResetPasswordLink = (<div className="col-auto" onClick={this.ResetPassword.bind(this)} >Reset Password</div>)
 
     const LoginForm = (
       /*RIGHT SIDE*/
@@ -123,7 +138,9 @@ class NavBar extends React.Component {
           <div className="col-auto pl-0">
             <div className="input-group">
               {/*Error message for invalid login credentials (email or pw)*/}
-              <div className="form-inline my-2 my-lg-0"><div className="text-warning">{this.state.loginerror}</div></div>
+              <div className="form-inline my-2 my-lg-0">
+                <div className="text-warning">{this.state.loginerror}</div>
+              </div>
               <div className="input-group-prepend">
                 <div className="email-icon input-group-text"><i className="far fa-user"></i></div>
               </div>
@@ -166,18 +183,35 @@ class NavBar extends React.Component {
       </div>
     )
 
+    function navbarChange(temp) {
+
+      
+
+      if (temp === "/HotelSearch") {
+        return "sticky-top navbar navbar-pages fixed-top"
+      }
+
+      else if (temp === "/RoomPage" || temp === "/ModifyRoomPage" || temp === "/Checkout"){
+        return "sticky-top navbar navbar-page-room fixed-top"
+      }
+
+      else{
+        return "sticky-top navbar navbar-home fixed-top"
+      }
+
+    }
+
     return (
-      <nav className= { this.props.location.pathname === "/" || this.props.location.pathname === "/HotelSearchh"  ? "sticky-top navbar navbar-home fixed-top" : "sticky-top navbar navbar-pages fixed-top" } >
+      <nav className={navbarChange(this.props.location.pathname)}>
         {/*<nav className="sticky-top navbar navbar-home navbar-dark bg-light fixed-top">*/}
 
         {/*LEFT SIDE*/}
         <div className="navbar-left form-inline my-2 my-lg-0" >
-          <div className="col-auto pl-0" onClick={this.Home.bind(this)}>
-            SPARTAN HOTELS
+          <div className="col-auto pl-0 custom-row" onClick={this.Home.bind(this)}>
+            <img className="imageLogo" src={imageLogo}></img>
+            <div>SPARTAN HOTELS</div>
           </div>
-          <div className="col-auto pl-0">
-            |
-          </div>
+          {localStorage.accesstoken ? EmptyForm : <div className="">|</div>}
           {localStorage.accesstoken ? EmptyForm : <Registration />}
         </div>
 
@@ -187,6 +221,7 @@ class NavBar extends React.Component {
 
           {localStorage.accesstoken ? ProfileLink : EmptyForm}
           {localStorage.accesstoken ? ReservationLink : EmptyForm}
+          {localStorage.accesstoken ? EmptyForm : ResetPasswordLink}
           {localStorage.accesstoken ? LogoutForm : LoginForm}
 
         </div>
