@@ -30,7 +30,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(session({
   secret: 'keybfsdoardafsa cat',
   store: sessionStore,
@@ -54,7 +53,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // CORS HANDLING
-app.use(cors({ credentials: true , origin: "http://localhost:3000"}))
+//app.use(cors({ credentials: true , origin: "http://localhost:3000"}))
+app.use(cors({ credentials: true , origin: "https://spartan-hotels.herokuapp.com"}))
+
 //https://stackoverflow.com/a/34574660
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
