@@ -16,7 +16,7 @@ var app = express();
 
 const sessionStore = new MySQLStore(config)
 
-app.use(express.static("../client/build"));
+//app.use(express.static("../client/build"));
 
 app.use((req, res, next) => {
   res.header(
