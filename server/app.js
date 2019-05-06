@@ -66,7 +66,12 @@ app.use(function(req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter)
-app.use(path.resolve(__dirname + '../client/build/index.html'))
+//app.use(path.resolve(__dirname + '../client/build/index.html'))
+
+app.get('*', (req, res) => {
+res.sendFile(path.resolve(__dirname + '../client/build/index.html'))
+})
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
