@@ -38,7 +38,7 @@ class CancelConfirmation extends React.Component {
 	      cancelTransaction(temp_fields).then(response => {
 	      	console.log(response)
 	        if (response === 200) {
-	          window.location.reload();
+	          window.location.origin
 	        } else if (response === 400) {
 	        }
 	      })
