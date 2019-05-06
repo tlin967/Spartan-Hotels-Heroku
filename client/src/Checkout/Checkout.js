@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route, withRouter } from 'react-router-dom'
 import {Elements, StripeProvider} from 'react-stripe-elements';
 import axios from 'axios'
 //import './../AppSC.css';
-
+import {cancelTransaction} from '../Utility/CancelButton'
 
 
 ////////Payment////
@@ -384,6 +384,15 @@ if(typeof(this.state.transaction_id) === 'undefined' || this.state.transaction_i
 }
 else{
    desiredRooms = this.state.rooms;
+             const temp_fields = {
+          transaction_id: this.state.transaction_id
+        }
+        cancelTransaction(temp_fields).then(response => {
+          console.log(response)
+          if (response === 200) {
+          } else if (response === 400) {
+          }
+        })
 }
   
 var totalRoomPricePerNight=0;
