@@ -27,6 +27,6 @@
     "randomstring": "^1.1.5",
     "shelljs": "^0.8.3",
     "stripe": "^8.39.1",
-    "validator": "^13.0.0"
+    "validator": "^13.7.0"
   }
 }
